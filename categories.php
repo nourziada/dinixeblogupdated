@@ -1,6 +1,30 @@
 <?php
-	
+
 	include "header.php";
+	
+
+	$ObjectPublic = new PublicFunction;
+	$ObjectDB = new DBFunctions;
+
+
+	// code for add new Category by FORM 
+
+	if(isset($_POST['btnSubmit'])) {
+		$categoryName = $_POST['name'];
+		$date = time();
+		if(empty($categoryName)){
+			$_SESSION['ErrorMassage'] = "Sorry ! Filed Category Name is Empty";
+			$ObjectPublic->Redirect_to("categories.php");
+			
+		}else if (strlen($categoryName) > 99 ) {
+			$_SESSION['ErrorMassage'] = "Sorry ! Category Name is Too Long";
+			$ObjectPublic->Redirect_to("categories.php");
+		}else {
+
+			$ObjectDB->addCategory($date,$categoryName,"Nour Ziada");
+			$_SESSION['SuccessMassage'] = "Done ! Category Name is Added Successfully";
+		}
+	}
 
 ?>
 
@@ -14,6 +38,11 @@
 	</ul>
 
 
+	<?php
+		echo errorMassage(); 
+		echo successMassage(); 
+	?>
+
 	<div class="row-fluid sortable">
 				<div class="box span12">
 					<div class="box-header" data-original-title>
@@ -23,18 +52,19 @@
 						</div>
 					</div>
 					<div class="box-content">
-						<form class="form-horizontal">
+
+						<form class="form-horizontal" action="Categories.php" method="POST">
 						  <fieldset>
 							<div class="control-group">
 							  <label class="control-label">Category Name: </label>
 							  <div class="controls">
-								<input type="text" class="span6 typeahead" id="typeahead" >
+								<input type="text" name="name" class="span6 typeahead" id="typeahead" >
 							  </div>
 							</div>
 
 
 							
-							<button type="submit" class="btn btn-primary" style="width: 100%;">Add Category</button>
+							<button type="submit" name="btnSubmit" class="btn btn-primary" style="width: 100%;">Add Category</button>
 						  </fieldset>
 						</form>   
 
@@ -47,6 +77,8 @@
 
 			<!-- Table -->
 
+			
+
 			<div class="row-fluid sortable">		
 				<div class="box span12">
 					<div class="box-header" data-original-title>
@@ -57,6 +89,20 @@
 					</div>
 					<div class="box-content">
 						<table class="table table-striped table-bordered bootstrap-datatable datatable">
+
+
+						<?php
+
+							$categoreis = $ObjectDB->getCategory();
+							if($categoreis == 0) {
+								echo "There is no Category ADDED";
+
+							}else {
+
+							
+
+						?>
+
 						  <thead>
 							  <tr>
 							  	  <th>No</th>
@@ -67,11 +113,22 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
-							<tr>
-								<td>1</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">CSS</td>
-								<td class="center">Nour Ziada</td>
+
+
+						  <!-- Code of PHP TO GET All Categorys -->
+
+						  
+						  <?php
+
+						  	$id=1;
+						  	foreach($categoreis as $category) {
+
+						  	?>
+						  	<tr>
+						  		<td> <?php echo $id++; ?></td>
+								<td class="center"> <?php echo date("Y-m-d", $category['date']); ?> </td>
+								<td class="center"><?php echo $category['name'] ; ?></td>
+								<td class="center"><?php echo $category['author']; ?></td>
 								
 
 
@@ -81,40 +138,21 @@
 										<i class="icon-trash"> </i> <span> Delete</span> 
 									</a>
 								</td>
-							</tr>
+							</tr>	
 
-							<tr>
-								<td>1</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">CSS</td>
-								<td class="center">Nour Ziada</td>
+						<?php		
+						  	}## end of foreach
+
+
+							}### end of ifelse that Categories empty
+						  ?>
+						  
+
+							
 								
+							
 
-
-								<td class="center">
-									
-									<a class="btn btn-danger" href="#">
-										<i class="icon-trash"> </i> <span> Delete</span> 
-									</a>
-								</td>
-							</tr>
-
-							<tr>
-								<td>1</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">CSS</td>
-								<td class="center">Nour Ziada</td>
-								
-
-
-								<td class="center">
-									
-									<a class="btn btn-danger" href="#">
-										<i class="icon-trash"> </i> <span> Delete</span> 
-									</a>
-								</td>
-							</tr>
-
+						
 						  </tbody>
 					  </table>            
 					</div>
