@@ -103,8 +103,21 @@
 
 							<div class="control-group">
 							  <label class="control-label" for="fileInput">Post Image:</label>
-							  <div class="controls">
-								<input class="input-file uniform_on" name="file" id="fileInput" type="file">
+							  <span class="controls">
+								<input class=" span6input-file uniform_on" name="file" id="fileInput" type="file">
+							  </span>
+
+							  <span class="span6" style="float:right; font-weight: bold;">Privew Image</span>
+							  
+							  <?php 
+
+							  	$image = "def.png";
+							  ?>
+							  <div style="border-radius: 1px solid #ccc">
+								  <span class="span6"></span>
+								  <span class="span6" style="float: right;">
+								  	<img src="uploads/<?php echo $image; ?>">
+								  </span>
 							  </div>
 							</div>
 

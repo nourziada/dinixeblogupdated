@@ -2,6 +2,27 @@
 
 	include "header.php";
 
+	$ObjectFunctions = new DBFunctions;
+	$postsData = $ObjectFunctions->getPosts(); 
+
+	$ObjectPublic = new PublicFunction;
+
+	// Code For Delete post
+	if(isset($_GET['delete'])) {
+		$id = intval($_GET['delete']);
+		$postData = $ObjectFunctions->getPost($id);
+
+		// Check if the id is FOUNDED OR NOT
+		if($postData == 0) {
+			$ObjectPublic->Redirect_to("404.php");
+		}else {
+			// Here the id IS FOUNDED
+			$ObjectFunctions->deletePosts($id);
+			$_SESSION['SuccessMassage'] = "Done ! Post Deleted Successfuly";
+			$ObjectPublic->Redirect_to("dashboard.php");
+		}
+	}
+
 ?>
 			
 			<ul class="breadcrumb">
@@ -12,6 +33,11 @@
 				</li>
 				<li><a href="">Dashboard</a></li>
 			</ul>
+
+	<?php
+		echo errorMassage(); 
+		echo successMassage(); 
+	?>
 
 
 			<div class="alert alert-success" role="alert">
@@ -83,12 +109,21 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
+
+						  	<?php
+						  		$no = 1;
+						  		foreach($postsData as $post) {
+						  			$title = $post['title'];
+						  			if(strlen($title) > 60) {
+						  				$title = substr($title, 0,60) . "...";
+						  			}
+						  	?>
 							<tr>
-								<td>1</td>
-								<td class="center">Here is the Post title we are add it on the blog</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">CSS</td>
+								<td><?php echo $no++; ?></td>
+								<td class="center"><?php echo $title; ?></td>
+								<td class="center"><?php echo date("Y-m-d",$post['date']); ?></td>
+								<td class="center"><?php echo $post['author']; ?></td>
+								<td class="center"><?php echo $post['category']; ?></td>
 								<td>
 									
 									<span class="label label-danger">5</span>
@@ -98,72 +133,23 @@
 
 
 								<td class="center">
-									<a class="btn btn-success" href="#">
+									<a class="btn btn-success" target="_blank" href="../post.php?id=<?php echo $post['id']; ?>">
 										<i class="icon-zoom-in"></i>  
 									</a>
-									<a class="btn btn-info" href="#">
+
+									<a class="btn btn-info" href="editpost.php?edit=<?php echo $post['id']; ?>">
 										<i class="icon-edit"></i>  
 									</a>
-									<a class="btn btn-danger" href="#">
+									<a class="btn btn-danger" href="dashboard.php?delete=<?php echo $post['id']; ?>">
 										<i class="icon-trash"></i> 
 									</a>
 								</td>
 							</tr>
 
-							<tr>
-								<td>1</td>
-								<td class="center">Here is the Post title we are add it on the blog</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">CSS</td>
-								<td>
-									
-									<span class="label label-danger">5</span>
-									<span class="label label-success" style="float:right;">3</span>
+							<?php
 
-								</td>
-
-
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="icon-zoom-in"></i>  
-									</a>
-									<a class="btn btn-info" href="#">
-										<i class="icon-edit"></i>  
-									</a>
-									<a class="btn btn-danger" href="#">
-										<i class="icon-trash"></i> 
-									</a>
-								</td>
-							</tr>
-
-
-							<tr>
-								<td>1</td>
-								<td class="center">Here is the Post title we are add it on the blog</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">CSS</td>
-								<td>
-									
-									<span class="label label-danger">5</span>
-									<span class="label label-success" style="float:right;">3</span>
-
-								</td>
-
-
-								<td class="center">
-									<a class="btn btn-success" href="#">
-										<i class="icon-zoom-in"></i>  
-									</a>
-									<a class="btn btn-info" href="#">
-										<i class="icon-edit"></i>  
-									</a>
-									<a class="btn btn-danger" href="#">
-										<i class="icon-trash"></i> 
-									</a>
-								</td>
-							</tr>
+								}// end of foreach 
+							?>
 
 						  </tbody>
 					  </table>            

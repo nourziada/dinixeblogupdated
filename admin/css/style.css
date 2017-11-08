@@ -3003,3 +3003,31 @@ ul.messagesList li span.date {
 .statbox > i {
     font-size: 75px;
 }
+
+
+#title404 {
+    color: crimson;
+    font-size: 60px;
+    font-family: 'DroidArabicKufiRegular';
+    font-weight: normal;
+    font-style: normal;
+    margin: 0px auto;
+    text-align: center;
+    padding-top: 200px;
+    font-size: 60px;
+
+}
+
+
+.content404 {
+	font-size: 30px;
+    line-height: 45px;
+    font-family: 'DroidArabicKufiRegular';
+    font-weight: 900;
+    font-style: normal;
+    margin: 0 auto;
+    text-align: center;
+    color:rgba(123, 192, 69, 0.72);
+
+    margin-bottom: 40px;
+}

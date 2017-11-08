@@ -53,6 +53,73 @@
 			$stmt->execute();
 		}
 
+
+		// get All Posts 
+		public function getPosts (){
+			global $con;
+			$sql = "SELECT * FROM posts ORDER BY id DESC";
+			$stmt = $con->prepare($sql);
+			$stmt->execute();
+
+			if($stmt->rowCount() > 0){
+				return $stmt->fetchAll();
+			}else {
+				return 0;
+			}
+
+
+		}
+
+		// Function That get Just One Post
+
+		public function getPost ($id){
+			global $con;
+			$sql = "SELECT * FROM posts WHERE id=?";
+			$stmt = $con->prepare($sql);
+			$stmt->bindParam(1,$id);
+			$stmt->execute();
+
+			if($stmt->rowCount() > 0){
+				return $stmt->fetch();
+			}else {
+				return 0;
+			}
+
+
+		}
+
+		// Function That Edit Post 
+		public function editPost ($id,$title,$category,$image,$content,$author){
+			global $con;
+			$sql = "UPDATE posts SET title=?, category=?, image=?, content=?, author=? WHERE id=?";
+			$stmt = $con->prepare($sql);
+			$stmt->bindParam(1,$title);
+			$stmt->bindParam(2,$category);
+			$stmt->bindParam(3,$image);
+			$stmt->bindParam(4,$content);
+			$stmt->bindParam(5,$author);
+			$stmt->bindParam(6,$id);
+
+			$stmt->execute();
+
+
+		}
+
+		// Delete Posts 
+		public function deletePosts ($id){
+			global $con;
+			$sql = "DELETE FROM posts WHERE id=?";
+			$stmt = $con->prepare($sql);
+			$stmt->bindParam(1,$id);
+			$stmt->execute();
+
+
+
+		}
+
+
+
+
 	}
 
 ?>
