@@ -1,6 +1,9 @@
 <?php
 	
 	include "header.php";
+
+	if(isset($_SESSION['username'])) {
+
 	$ObjectFunction = new DBFunctions;
 	$objectPublic = new PublicFunction;
 
@@ -163,5 +166,10 @@
 <?php
 
 	include "footer.php";
+
+	}else {
+		header("Location :login.php");
+	}
+
 
 ?>

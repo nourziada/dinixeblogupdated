@@ -1,6 +1,51 @@
 <?php
 
 	include "header.php";
+	$ObjectPublic = new PublicFunction;
+
+
+	$ObjectComment = new CommentFunctions;
+	$activeCommentsData = $ObjectComment->getActiveComments();
+	$disactiveCommentData = $ObjectComment->getDisActiveComments();
+
+	/// Code For Approve Comment
+	if(isset($_GET['approve'])) {
+		$commentID = intval($_GET['approve']);
+
+		$ObjectComment->activeComment($commentID);
+		$success = "Done , Comment Approved Successfuly";
+
+		$ObjectPublic->Redirect_to("comments.php");
+
+	}
+
+
+
+	/// Code For Dis Approve Comment
+	if(isset($_GET['disapprove'])) {
+		$commentID = intval($_GET['disapprove']);
+
+		$ObjectComment->DisactiveComment($commentID);
+		$success = "Done , Comment Dis Approved Successfuly";
+
+		$ObjectPublic->Redirect_to("comments.php");
+
+	}
+
+
+	// Code For Delete Un  Approve Comment 
+	if(isset($_GET['delete'])) {
+		$commentID = intval($_GET['delete']);
+
+		$ObjectComment->deleteunActiveComment($commentID);
+		$success = "Done , Comment Deleted Successfuly";
+
+		$ObjectPublic->Redirect_to("comments.php");
+
+	}
+
+
+
 
 ?>
 
@@ -12,6 +57,22 @@
 		</li>
 			<li><a href="">Comments</a></li>
 	</ul>
+
+	<?php
+
+		if(isset($success)) {
+
+
+	?>
+	<div class="container" style="text-align: center;">
+		<div class="alert alert-success" role="alert"> 
+			<strong><?php echo $success; ?></strong>
+		</div>
+	</div> 
+
+	<?php
+		}// end of isset Success Msg
+	?>
 
 
 			<!-- Table of Un Approved Posts -->
@@ -36,22 +97,44 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
+						  	<?php
+						  		// get the Dis Active Comment Data
+						  		if($disactiveCommentData == 0) {
+						  		// here Code if there is no Data Comment to Show	
+						  	?>
+
+						  	<div class="container" style="text-align: center;">
+				            	<div class="alert alert-info" role="alert"> 
+				              		<strong>There is No Data to Show</strong>
+				            	</div>
+				          	</div> 
+
+				          	<?php 
+				          	// else if there is Data
+						  		}else {
+						  			$sno = 1;
+						  			foreach($disactiveCommentData as $comment){
+
+
+
+						  	?>
 							<tr>
-								<td>1</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">22/07/2017</td>
-								<td class="center" style="width: 590px;">here is the first comment of the website blog </td>
+								<td><?php echo $sno++; ?></td>
+								<td class="center"><?php echo $comment['name']; ?></td>
+								<td class="center"><?php echo date("Y-m-d", $comment['date']); ?></td>
+								<td class="center" style="width: 590px;">
+									<?php echo $comment['comment']; ?> </td>
 								<td>
 
-									<a class="btn btn-success" href="#">
+									<a class="btn btn-success" href="comments.php?approve=<?php echo $comment['id']; ?>">
 										Approve
 									</a>
 
-									<a class="btn btn-danger" href="#">
+									<a class="btn btn-danger" href="comments.php?delete=<?php echo $comment['id']; ?>">
 										Delete
 									</a>
 
-									<a class="btn btn-info" href="#">
+									<a class="btn btn-info" target="_blank" href="../post.php?id=<?php echo $comment['postid']; ?>">
 										<i class="icon-zoom-in"></i>  
 									</a>
 									
@@ -64,62 +147,13 @@
 
 							</tr>
 
-							<tr>
-								<td>1</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">22/07/2017</td>
-								<td class="center" style="width: 590px;">here is the first comment of the website blog </td>
-								<td>
+							<?php
+								}// end of Foreach
+								}//end of ifelse where is there is Data
 
-									<a class="btn btn-success" href="#">
-										Approve
-									</a>
-
-									<a class="btn btn-danger" href="#">
-										Delete
-									</a>
-
-									<a class="btn btn-info" href="#">
-										<i class="icon-zoom-in"></i>  
-									</a>
-									
-									
-
-									
-
-								</td>
+							?>
 
 
-							</tr>
-
-
-							<tr>
-								<td>1</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">22/07/2017</td>
-								<td class="center" style="width: 590px;">here is the first comment of the website blog </td>
-								<td>
-
-									<a class="btn btn-success" href="#">
-										Approve
-									</a>
-
-									<a class="btn btn-danger" href="#">
-										Delete
-									</a>
-
-									<a class="btn btn-info" href="#">
-										<i class="icon-zoom-in"></i>  
-									</a>
-									
-									
-
-									
-
-								</td>
-
-
-							</tr>
 
 						  </tbody>
 					  </table>            
@@ -152,23 +186,33 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
+
+						  	<?php
+						  		$no = 1;
+						  		foreach($activeCommentsData as $Acomment) {
+
+						  		
+
+						  	?>
 							<tr>
-								<td>1</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">22/07/2017</td>
-								<td class="center" style="width:470px;">here is the first comment of the website blog </td>
+								<td><?php echo $no++; ?></td>
+								<td class="center"><?php echo $Acomment['name']; ?></td>
+								<td class="center"><?php echo date("Y-m-d",$Acomment['date']); ?></td>
+								<td class="center" style="width:470px;">
+								<?php echo $Acomment['comment']; ?> </td>
+
 								<td class="center">Nour Ziada</td>
 								<td>
 
-									<a class="btn btn-warning" href="#">
+									<a class="btn btn-warning" href="comments.php?disapprove=<?php echo $Acomment['id']; ?>">
 										Dis - Approve
 									</a>
 
-									<a class="btn btn-danger" href="#">
+									<a class="btn btn-danger" href="comments.php?delete=<?php echo $Acomment['id']; ?>">
 										Delete
 									</a>
 
-									<a class="btn btn-info" href="#">
+									<a class="btn btn-info" target="_blank" href="../post.php?id=<?php echo $Acomment['postid']; ?>">
 										<i class="icon-zoom-in"></i>  
 									</a>				
 
@@ -177,55 +221,11 @@
 
 							</tr>
 
-							<tr>
-								<td>1</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">22/07/2017</td>
-								<td class="center" style="width:470px;">here is the first comment of the website blog </td>
-								<td class="center">Nour Ziada</td>
-								<td>
+							<?php
 
-									<a class="btn btn-warning" href="#">
-										Dis - Approve
-									</a>
+								}// end foreach for Active Comments Data
+							?>
 
-									<a class="btn btn-danger" href="#">
-										Delete
-									</a>
-
-									<a class="btn btn-info" href="#">
-										<i class="icon-zoom-in"></i>  
-									</a>				
-
-								</td>
-
-
-							</tr>
-
-							<tr>
-								<td>1</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">22/07/2017</td>
-								<td class="center" style="width:470px;">here is the first comment of the website blog </td>
-								<td class="center">Nour Ziada</td>
-								<td>
-
-									<a class="btn btn-warning" href="#">
-										Dis - Approve
-									</a>
-
-									<a class="btn btn-danger" href="#">
-										Delete
-									</a>
-
-									<a class="btn btn-info" href="#">
-										<i class="icon-zoom-in"></i>  
-									</a>				
-
-								</td>
-
-
-							</tr>
 
 						  </tbody>
 					  </table>            

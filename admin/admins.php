@@ -2,6 +2,53 @@
 	
 	include "header.php";
 
+	if(isset($_SESSION['username'])) {
+
+		// Identify the Class 
+		$ObjectPublic = new PublicFunction;
+		$ObjectAdmins = new Admins;
+
+
+		// Code for Add new Admin
+		if(isset($_POST['btnSubmit'])) {
+			$username = $_POST['username'];
+			$password = $_POST['password'];
+			$rpassword = $_POST['rpassword'];
+
+			if(empty($username) || empty($password) || empty($rpassword)) {
+				$_SESSION['ErrorMassage'] = "Error ! All Fileds is Requireds";
+				$ObjectPublic->Redirect_to("admins.php");
+			}else if (strlen($username) < 4 || strlen($username) > 100) {
+				$_SESSION['ErrorMassage'] = "Error ! username is Too Short OR Too Long";
+				$ObjectPublic->Redirect_to("admins.php");
+			}else if ($password !== $rpassword) {
+				$_SESSION['ErrorMassage'] = "Error ! password and return password does not Matches";
+				$ObjectPublic->Redirect_to("admins.php");
+			}else if (strlen($password) < 4) {
+				$_SESSION['ErrorMassage'] = "Error ! password is Too Short";
+				$ObjectPublic->Redirect_to("admins.php");
+			}else {
+				$ObjectAdmins->addAdmin(time() , $username,md5($password) , $_SESSION['username']);
+				$_SESSION['SuccessMassage'] = "Done ! Admin Add Successfuly";
+				$ObjectPublic->Redirect_to("admins.php");
+			}
+
+		}
+
+		// code for delete Admins
+
+		/* Code for Delete Post */
+  		if(isset($_GET['delete'])) {
+		$adminID = intval($_GET['delete']);
+
+		$ObjectAdmins->deleteAdmin($adminID);
+		$_SESSION['SuccessMassage'] = "Done ! Admin Deleted Successfuly";
+		$ObjectPublic->Redirect_to("admins.php");
+
+	}
+
+
+
 ?>
 
 	<ul class="breadcrumb">
@@ -13,6 +60,11 @@
 			<li><a href="">Manage Admins</a></li>
 	</ul>
 
+	<?php
+		echo errorMassage(); 
+		echo successMassage(); 
+	?>
+
 
 	<div class="row-fluid sortable">
 				<div class="box span12">
@@ -23,32 +75,32 @@
 						</div>
 					</div>
 					<div class="box-content">
-						<form class="form-horizontal">
+						<form class="form-horizontal" action="admins.php" method="POST">
 						  <fieldset>
 							<div class="control-group">
 							  <label class="control-label">Username: </label>
 							  <div class="controls">
-								<input type="text" class="span6 typeahead" id="typeahead" >
+								<input type="text" name="username" class="span6 typeahead" id="typeahead" >
 							  </div>
 							</div>
 
 							<div class="control-group">
 							  <label class="control-label">Password: </label>
 							  <div class="controls">
-								<input type="text" class="span6 typeahead" id="typeahead" >
+								<input type="text" name="password" class="span6 typeahead" id="typeahead" >
 							  </div>
 							</div>
 
 							<div class="control-group">
 							  <label class="control-label">Confirm Password: </label>
 							  <div class="controls">
-								<input type="text" class="span6 typeahead" id="typeahead" >
+								<input type="text" name="rpassword" class="span6 typeahead" id="typeahead" >
 							  </div>
 							</div>
 
 
 							
-							<button type="submit" class="btn btn-primary" style="width: 100%;">Add Admin</button>
+							<button type="submit" name="btnSubmit" class="btn btn-primary" style="width: 100%;">Add Admin</button>
 						  </fieldset>
 						</form>   
 
@@ -81,55 +133,42 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
+
+						  	<?php 
+						  		// Code for get Admin Data
+						  		$adminData = $ObjectAdmins->getAdmins();
+						  		if($adminData == 0) {
+						  			echo "No Data Avalibale :(";
+						  		}else {
+						  			$no = 1;
+						  			foreach($adminData as $data){
+
+
+
+
+						  	?>
 							<tr>
-								<td>1</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">Nour Ziada</td>
+								<td><?php echo $no++; ?></td>
+								<td class="center"><?php echo date("Y-m-d" , $data['date']); ?></td>
+								<td class="center"><?php echo $data['username']; ?></td>
+								<td class="center"><?php echo $data['addby']; ?></td>
 
 
 
 								<td class="center">
 									
-									<a class="btn btn-danger" href="#">
+									<a class="btn btn-danger" href="admins.php?delete=<?php echo $data['id']; ?>">
 										<i class="icon-trash"> </i> <span> Delete</span> 
 									</a>
 								</td>
 							</tr>
 
-							<tr>
-								<td>1</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">Nour Ziada</td>
+							<?php
 
+								}// end of foreach
+								}//end of ifelse
 
-
-								<td class="center">
-									
-									<a class="btn btn-danger" href="#">
-										<i class="icon-trash"> </i> <span> Delete</span> 
-									</a>
-								</td>
-							</tr>
-
-
-							<tr>
-								<td>1</td>
-								<td class="center">22/07/2017</td>
-								<td class="center">Nour Ziada</td>
-								<td class="center">Nour Ziada</td>
-
-
-
-								<td class="center">
-									
-									<a class="btn btn-danger" href="#">
-										<i class="icon-trash"> </i> <span> Delete</span> 
-									</a>
-								</td>
-							</tr>
-
+							?>
 						  </tbody>
 					  </table>            
 					</div>
@@ -141,6 +180,10 @@
 
 
 	include "footer.php";
+
+	}else {
+		header("Location :login.php");
+	}
 
 ?>
 

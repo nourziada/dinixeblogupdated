@@ -1,6 +1,6 @@
 <?php
 
-$host = 'mysql:host=localhost;dbname=dinixeblog';
+$host = 'mysql:host=localhost;dbname=dinixeblogcms';
 $user = 'root';
 $password = '';
 

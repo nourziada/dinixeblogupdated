@@ -32,20 +32,34 @@ include 'functions.php';
               $posts = $post->get_allposts();
             }
 
-            foreach($posts as $post) {
+            foreach($posts as $postdata) {
             
           ?>
           <!-- Blog Post -->
           <div class="card mb-4">
-            <img class="card-img-top" src="img/<?php echo $post['image']; ?>" alt="Card image cap">
+            <img class="card-img-top" src="admin/uploads/<?php echo $postdata['image']; ?>" alt="Card image cap">
             <div class="card-body">
-              <h2 class="card-title"><?php echo $post['title'];?></h2>
-              <p class="card-text"><?php echo $post['content']; ?></p>
-              <a href="post.php?id=<?php echo $post['id'];?>" class="btn btn-primary">&rarr; إقرأ المزيد</a>
+              <h2 class="card-title"><?php echo $postdata['title'];?></h2>
+              <p class="card-text"><?php echo $postdata['content']; ?></p>
+              <a href="post.php?id=<?php echo $postdata['id'];?>" class="btn btn-primary">&rarr; إقرأ المزيد</a>
             </div>
             <div class="card-footer text-muted">
+              <span>القسم : </span><span><a href=""> <?php echo $postdata['category']; ?></a></span>
               تم النشر في  
-              <?php echo date('Y-m-d', $post['date']); ?>
+              <?php echo date('Y-m-d', $postdata['date']); ?>
+
+              <span class="comments-no">التعليقات: 
+                <span> 
+                <?php
+                  $postID =  $postdata['id']; 
+                  $commentsNo = $post->get_commentsNo($postID);
+                  echo $commentsNo;
+                ?>
+                 
+                </span>
+              </span>
+
+
             </div>
           </div>
 

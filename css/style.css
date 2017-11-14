@@ -487,3 +487,11 @@ th {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.comments-no {
+    float: left;
+    background: #807e7e;
+    border-radius: 10px 10px 10px 10px;
+    padding: 2px;
+    color: #fff;
+}

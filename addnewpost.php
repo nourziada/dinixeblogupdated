@@ -2,9 +2,6 @@
 	
 	include "header.php";
 
-	if(isset($_SESSION['username'])) {
-
-
 	$ObjectPublic = new PublicFunction;
 	$ObjectDB = new DBFunctions;
 
@@ -14,7 +11,7 @@
 		$category = $_POST['category'];
 		$content = $_POST['content'];
 		$date = time();
-		$author = $_SESSION['username'];
+		$author = "Nour Ziada";
 
 		// Code for add name to the image , and add Location 
 		$image = $_FILES['file']['name'];
@@ -27,7 +24,7 @@
 		}elseif (strlen($title) < 2) {
 			$_SESSION['ErrorMassage'] = "Sorry ! Title must be larger than 2 char";
 			$ObjectPublic->Redirect_to("addnewpost.php");
-		}else if (strlen($content) > 5000) {
+		}else if (strlen($content) > 1000) {
 			$_SESSION['ErrorMassage'] = "Sorry ! Content is too Longer";
 			$ObjectPublic->Redirect_to("addnewpost.php");
 		}else {
@@ -150,10 +147,6 @@
 
 
 	include "footer.php";
-
-	}else {
-		header("Location :login.php");
-	}
 
 ?>
 

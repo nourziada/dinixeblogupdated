@@ -2,6 +2,11 @@
 	require 'inc/connection.php';
 	include 'inc/functions.php';
 	include "inc/sessions.php";
+
+	// Code For get the Comments Number Active And DesActive
+	$ObjectComment = new CommentFunctions;
+	$disactiveCommentNo = $ObjectComment->getDisActiveCommentsNoHeader();
+
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +71,7 @@
 						
 						
 						<li>
-							<a class="btn" href="#">
+							<a class="btn" href="settings.php">
 								<i class="icon-wrench"></i><span>Settings</span>
 							</a>
 						</li>
@@ -74,12 +79,11 @@
 						<!-- start: User Dropdown -->
 						<li class="dropdown">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="icon-user"></i> Dennis Ji
+								<i class="icon-user"></i> <?php echo $_SESSION['username']; ?>
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#"><i class="icon-user"></i> Profile</a></li>
-								<li><a href="login.php"><i class="icon-off"></i> Logout</a></li>
+								<li><a href="logout.php"><i class="icon-off"></i> Logout</a></li>
 							</ul>
 						</li>
 
@@ -116,7 +120,7 @@
 							<a href="comments.php">
 								<i class="icon-comments-alt"></i><span class="hidden-tablet"> Comments</span> 
 
-								<span class="label label-important"> 3 </span>
+								<span class="label label-important"> <?php echo $disactiveCommentNo; ?> </span>
 							</a>
 						</li>
 						

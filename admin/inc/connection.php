@@ -1,8 +1,8 @@
 <?php
 
-	$host = 'mysql:host=localhost;dbname=dinixeblogcms';
-	$user = 'root';
-	$password = '';
+	$host = 'mysql:host=localhost;dbname=qurani_blogdinix';
+	$user = 'qurani_blogdinix';
+	$password = '100200300';
 
 	$options = array(
 

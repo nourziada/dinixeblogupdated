@@ -39,9 +39,11 @@ require 'connection.php';
 
 		public function get_comments($postid){
 			global $connect;
-			$sql = "SELECT * FROM comments WHERE postid=? ORDER BY id DESC";
+			$type = 1;
+			$sql = "SELECT * FROM comments WHERE postid=? AND status=? ORDER BY id DESC";
 			$stmt = $connect->prepare($sql);
 			$stmt -> bindParam(1,$postid,PDO::PARAM_INT);
+			$stmt -> bindParam(2,$type);
 			$stmt->execute();
 
 			$rowCount = $stmt->rowCount();
@@ -52,16 +54,32 @@ require 'connection.php';
 			}
 		}
 
+		public function get_commentsNo($postid){
+			global $connect;
+			$type = 1;
+			$sql = "SELECT * FROM comments WHERE postid=? AND status=? ORDER BY id DESC";
+			$stmt = $connect->prepare($sql);
+			$stmt -> bindParam(1,$postid,PDO::PARAM_INT);
+			$stmt -> bindParam(2,$type);
+			$stmt->execute();
+
+			$rowCount = $stmt->rowCount();
+			return $rowCount;
+		}
+
 
 
 		###### Funtion to add comment 
 
-		public function add_comment ($postid,$comment){
+		public function add_comment ($date,$name,$comment,$postid,$status){
 			global $connect;
-			$sql = "INSERT INTO comments (postid, comment) VALUES (?, ?)";
+			$sql = "INSERT INTO comments (date,name,comment,postid,status) VALUES (?,?,?,?,?)";
 			$stmt = $connect->prepare($sql);
-			$stmt->bindParam(1,$postid);
-			$stmt->bindParam(2,$comment);
+			$stmt->bindParam(1,$date);
+			$stmt->bindParam(2,$name);
+			$stmt->bindParam(3,$comment);
+			$stmt->bindParam(4,$postid);
+			$stmt->bindParam(5,$status);
 			$stmt->execute();
 		}
 

@@ -1,6 +1,9 @@
 <?php
 
 	include "header.php";
+
+	if(isset($_SESSION['username'])){
+
 	
 
 	$ObjectPublic = new PublicFunction;
@@ -11,6 +14,7 @@
 
 	if(isset($_POST['btnSubmit'])) {
 		$categoryName = $_POST['name'];
+		$author = $_SESSION['username'];
 		$date = time();
 		if(empty($categoryName)){
 			$_SESSION['ErrorMassage'] = "Sorry ! Filed Category Name is Empty";
@@ -21,9 +25,22 @@
 			$ObjectPublic->Redirect_to("categories.php");
 		}else {
 
-			$ObjectDB->addCategory($date,$categoryName,"Nour Ziada");
+			$ObjectDB->addCategory($date,$categoryName,$author);
 			$_SESSION['SuccessMassage'] = "Done ! Category Name is Added Successfully";
 		}
+	}
+
+
+	// Code for Delete Category
+
+	if(isset($_GET['delete'])) {
+		$categoryID = intval($_GET['delete']);
+
+		$ObjectDB->deleteCategory($categoryID);
+		$_SESSION['SuccessMassage'] = "Done , Category Deleted Successfuly";
+
+		$ObjectPublic->Redirect_to("categories.php");
+
 	}
 
 ?>
@@ -134,7 +151,7 @@
 
 								<td class="center">
 									
-									<a class="btn btn-danger" href="#">
+									<a class="btn btn-danger" href="categories.php?delete=<?php echo $category['id']; ?>">
 										<i class="icon-trash"> </i> <span> Delete</span> 
 									</a>
 								</td>
@@ -164,6 +181,10 @@
 
 
 	include "footer.php";
+
+	}else {
+		header("Location :login.php");
+	}
 
 ?>
 

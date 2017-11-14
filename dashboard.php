@@ -2,23 +2,10 @@
 
 	include "header.php";
 
-	if(isset($_SESSION['username'])) {
-
-
-
 	$ObjectFunctions = new DBFunctions;
 	$postsData = $ObjectFunctions->getPosts(); 
 
 	$ObjectPublic = new PublicFunction;
-
-	// here we get the Counts of POSTS/CATEGORIES/COMMENTS/ADMINS
-	$ObjectAdmins = new Counts;
-
-	$postsNo = $ObjectAdmins->countPosts();
-	$catgeroisNo = $ObjectAdmins->countCategories();
-	$commentsNo = $ObjectAdmins->countComments();
-	$adminsNo = $ObjectAdmins->countAdmins();
-
 
 	// Code For Delete post
 	if(isset($_GET['delete'])) {
@@ -35,11 +22,6 @@
 			$ObjectPublic->Redirect_to("dashboard.php");
 		}
 	}
-
-
-	// Code For get the Comments Number Active And DesActive
-	$ObjectComment = new CommentFunctions;
-	
 
 ?>
 			
@@ -59,14 +41,14 @@
 
 
 			<div class="alert alert-success" role="alert">
-			  <strong>Welcome</strong> <?php echo $_SESSION['username']; ?>
+			  <strong>Welcome</strong> Nour Ziada
 			</div>
 
 			<div class="row-fluid">
 				
 				<div class="span3 statbox purple" onTablet="span6" onDesktop="span3">
 					<i class="icon-list-larg"></i>
-					<div class="number"><?php echo $postsNo; ?><i class="icon-arrow-up"></i></div>
+					<div class="number">854<i class="icon-arrow-up"></i></div>
 					<div class="title">Posts</div>
 					<div class="footer">
 						<a href=""> Show All Posts</a>
@@ -75,7 +57,7 @@
 
 				<div class="span3 statbox green" onTablet="span6" onDesktop="span3">
 					<i class="icon-cat-larg"></i>
-					<div class="number"><?php echo $catgeroisNo; ?><i class="icon-arrow-up"></i></div>
+					<div class="number">123<i class="icon-arrow-up"></i></div>
 					<div class="title">Categories</div>
 					<div class="footer">
 						<a href="categories.php"> Show all Categories</a>
@@ -84,7 +66,7 @@
 
 				<div class="span3 statbox blue noMargin" onTablet="span6" onDesktop="span3">
 					<i class="icon-comments-larg"></i>
-					<div class="number"><?php echo $commentsNo; ?><i class="icon-arrow-up"></i></div>
+					<div class="number">982<i class="icon-arrow-up"></i></div>
 					<div class="title">Comments</div>
 					<div class="footer">
 						<a href="comments.php"> Show All Comments</a>
@@ -93,7 +75,7 @@
 
 				<div class="span3 statbox yellow" onTablet="span6" onDesktop="span3">
 					<i class="icon-admins-larg"></i>
-					<div class="number"><?php echo $adminsNo; ?><i class="icon-arrow-up"></i></div>
+					<div class="number">678<i class="icon-arrow-up"></i></div>
 					<div class="title">Admins</div>
 					<div class="footer">
 						<a href="admins.php"> Show All Admins</a>
@@ -144,32 +126,8 @@
 								<td class="center"><?php echo $post['category']; ?></td>
 								<td>
 									
-									<span class="label label-danger">
-
-									<?php
-
-										// DisActive Comment No
-										$commentPostid = $post['id'];
-										$disactiveCommentNo = $ObjectComment->getDisActiveCommentsNo($commentPostid);
-
-										echo $disactiveCommentNo;
-
-
-
-
-									?>
-									</span>
-									<span class="label label-success" style="float:right;">
-
-									<?php
-
-										// Active Comment No
-										$activeCommentNo = $ObjectComment->getActiveCommentsNo($commentPostid);
-
-										echo $activeCommentNo;
-
-									?>
-									</span>
+									<span class="label label-danger">5</span>
+									<span class="label label-success" style="float:right;">3</span>
 
 								</td>
 
@@ -208,10 +166,6 @@
 <?php
 
 	include "footer.php";
-
-	}else {
-		header("Location:login.php");
-	}
 
 ?>
 

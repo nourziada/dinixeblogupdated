@@ -33,12 +33,22 @@
   ###### METHOD OF ADD COMMENT ###### 
   if(isset($_POST['btnsubmit'])) {
     $comment = $_POST['comment'];
-    if(empty($comment)) {
+    $name = $_POST['name'];
+    $date = time();
 
+    if(empty($comment) || empty($name)) {
+
+        $error = "عذراً ! كافة الحقول مطلوبة";
+
+    }elseif (strlen($name) > 50) {
+      $error = "ذعراً ! الاسم لا يجب أن يكون طويل جداً ";
+    }else if (strlen($comment) > 250) {
+      $error = "عذراً ! التعليق لا يجب أن يكون طويل جداً";
     }else {
 
-      $postdata->add_comment($id,$comment);
-      header("Refresh:0");
+      $postdata->add_comment($date,$name,$comment,$id,0);
+      $success = "تم إضافة التعليق بنجاح وهو بإنتظار المرآجعة";
+      
 
 
     }
@@ -63,7 +73,7 @@
           <p><?php echo date('Y-m-d' , $post['date']); ?></p>
           <hr>
           <!-- Preview Image -->
-          <img class="img-fluid rounded" src="img/<?php echo $post['image']; ?>" alt="">
+          <img class="img-fluid rounded" src="admin/uploads/<?php echo $post['image']; ?>" alt="">
           <hr>
 
           <!-- Post Content -->
@@ -71,13 +81,47 @@
 
           <hr>
 
+          <?php
+
+            if(isset($error)) {
+
+          ?>
+          <div class="container" style="margin-top:10px">
+            <div class="alert alert-danger" role="alert"> 
+              <strong><?php echo $error; ?></strong>
+            </div>
+          </div>  
+
+          <?php
+            }//end if of isset the error to print
+          ?> 
+
+
+          <?php
+
+            if(isset($success)) {
+
+          ?>
+          <div class="container" style="margin-top:10px">
+            <div class="alert alert-success" role="alert"> 
+              <strong><?php echo $success; ?></strong>
+            </div>
+          </div>  
+
+          <?php
+            }//end if of isset the success to print
+          ?> 
+
           <!-- Comments Form -->
           <div class="card my-4">
             <h5 class="card-header">أضف تعليق : </h5>
             <div class="card-body">
               <form action="" method="POST">
                 <div class="form-group">
-                  <textarea name="comment" class="form-control" rows="3"></textarea>
+                  <input type="text" name="name" class="form-control" placeholder="الاسم كاملاً">
+                </div>
+                <div class="form-group">
+                  <textarea name="comment" class="form-control" rows="3" placeholder="أترك تعليقك هنا ..."></textarea>
                 </div>
                 <button name="btnsubmit" type="submit" class="btn btn-primary">أضف</button>
               </form>
@@ -102,13 +146,23 @@ foreach($comments as $comment){
 
 ?>
           <!-- Single Comment -->
-          <div class="media mb-4">
+          <div class="media mb-4" style="margin-bottom: 0px !important;">
             <img class="d-flex mr-3 rounded-circle visitor-img" src="img/favicon.ico" alt="">
             <div class="media-body">
-              <h5 class="mt-0">~ زائر ~</h5>
+              <span class="mt-0" style="font-size: 1.25rem;font-weight: 500;">~ <?php echo $comment['name']; ?> ~</span>
+              <span style="font-size: 12px;color: #ccc;margin-right: 16px;">
+              <?php
+                echo date("Y-m-d",$comment['date']);
+              ?>
+              </span>
+
+              <br>
+
               <?php echo $comment['comment']; ?>
             </div>
           </div>
+
+          <div class="flex" style="width: 100%;border: 1px solid #ccc;margin-bottom: 5px;margin-top: 5px;"></div>
 
 <?php 
 }#### end of if else 
